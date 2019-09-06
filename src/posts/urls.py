@@ -1,3 +1,5 @@
+from os import path
+
 from django.conf.urls import url
 from django.contrib import admin
 
@@ -9,9 +11,11 @@ from .views import (
     post_delete,
     PostLikeToggle,
     PostLikeAPIToggle,
-    )
+    login_page, register)
 
 urlpatterns = [
+    url('/login', login_page),
+    url('/login', register),
     url(r'^$', post_list, name='list'),
     url(r'^create/$', post_create),
     url(r'^(?P<slug>[\w-]+)/$', post_detail, name='detail'),
