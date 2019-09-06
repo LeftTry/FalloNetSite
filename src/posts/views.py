@@ -34,7 +34,7 @@ def login_page(request):
         password = request.POST.get('password', '')
 
         if username == '' or password == '':
-            messages.error(request, 'Заполните все поля!')
+            #messages.error(request, 'Заполните все поля!')
             return redirect('/login')
 
         user = authenticate(username=username, password=password)
@@ -43,7 +43,7 @@ def login_page(request):
             login(request, user)
             return redirect('/')
         else:
-            messages.error(request, 'Неправильный логин или пароль!')
+            #messages.error(request, 'Неправильный логин или пароль!')
             return redirect('/login')
 
 
@@ -58,11 +58,11 @@ def register(request):
         email = request.POST.get('email', '')
 
         if username == '' or password == '' or email == '':
-            messages.error(request, 'Заполните все поля')
+            #messages.error(request, 'Заполните все поля')
             return redirect('Login/register')
 
         if User.objects.filter(username=username).exists():
-            messages.error(request, "Логин занят")
+            #messages.error(request, "Логин занят")
             return redirect('/register')
 
         # создаем пользователя
