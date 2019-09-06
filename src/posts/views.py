@@ -1,3 +1,6 @@
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.models import User
+
 try:
     from urllib import quote_plus #python 2
 except:
@@ -21,7 +24,60 @@ from django.utils import timezone
 from .forms import PostForm
 from .models import Post
 
+def login_page(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            return redirect('/')
+        return render(request, 'Login/login.html')
+    if request.method == 'POST':
+        username = request.POST.get('login', '')
+        password = request.POST.get('password', '')
 
+        if username == '' or password == '':
+            messages.error(request, 'Заполните все поля!')
+            return redirect('/login')
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            messages.error(request, 'Неправильный логин или пароль!')
+            return redirect('/login')
+
+
+def register(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            return redirect('/')
+        return render(request, 'Login/register.html')
+    if request.method == 'POST':
+        username = request.POST.get('login', '')
+        password = request.POST.get('password', '')
+        email = request.POST.get('email', '')
+
+        if username == '' or password == '' or email == '':
+            messages.error(request, 'Заполните все поля')
+            return redirect('Login/register')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Логин занят")
+            return redirect('/register')
+
+        # создаем пользователя
+        user = User.objects.create_user(username, email, password)
+        user.save()
+
+        # "входим" пользователя
+        login(request, user)
+
+        return redirect('/')
+
+def logout_page(request):
+    if request.method == 'POST':
+        logout(request)
+    return redirect('/login')
 
 def post_create(request):
     if not request.user.is_staff or not request.user.is_superuser:
