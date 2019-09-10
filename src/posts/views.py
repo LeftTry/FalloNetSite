@@ -34,7 +34,7 @@ def login_page(request):
         password = request.POST.get('password', '')
 
         if username == '' or password == '':
-            return redirect('/login')
+            return render(request, 'Login/login.html')
 
         user = authenticate(username=username, password=password)
 
@@ -42,7 +42,7 @@ def login_page(request):
             login(request, user)
             return redirect('/')
         else:
-            return redirect('/login')
+            return render(request, 'Login/login.html')
 
 
 def register(request):
@@ -56,10 +56,10 @@ def register(request):
         email = request.POST.get('email', '')
 
         if username == '' or password == '' or email == '':
-            return redirect('Login/register')
+            return render(request, 'Login/register.html')
 
         if User.objects.filter(username=username).exists():
-            return redirect('/register')
+            return render(request, 'Login/register.html')
 
         user = User.objects.create_user(username, email, password)
         user.save()
@@ -71,7 +71,7 @@ def register(request):
 def logout_page(request):
     if request.method == 'POST':
         logout(request)
-    return redirect('/login')
+    return render(request, 'Login/login.html')
 
 def post_create(request):
     if not request.user.is_staff or not request.user.is_superuser:
