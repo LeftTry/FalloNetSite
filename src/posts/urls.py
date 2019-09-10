@@ -14,8 +14,8 @@ from .views import (
     login_page, register)
 
 urlpatterns = [
-    url('/login', login_page),
-    url('/register', register),
+    url(r'^login', login_page),
+    url(r'^register', register),
     url(r'^$', post_list, name='list'),
     url(r'^create/$', post_create),
     url(r'^(?P<slug>[\w-]+)/$', post_detail, name='detail'),
