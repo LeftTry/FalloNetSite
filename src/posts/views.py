@@ -61,11 +61,9 @@ def register(request):
         if User.objects.filter(username=username).exists():
             return redirect('/register')
 
-        # создаем пользователя
         user = User.objects.create_user(username, email, password)
         user.save()
 
-        # "входим" пользователя
         login(request, user)
 
         return redirect('/')
